@@ -1,0 +1,9 @@
++incdir+$UVM_HOME/src
++incdir+../tb
++incdir+../sv
++incdir+../tests
++incdir+../tests/seq_lib
+$UVM_HOME/src/uvm_pkg.sv
+../dut/src/*.v
+../dut/scdc_ip/*.v
+../tb/gpio_int_top.sv

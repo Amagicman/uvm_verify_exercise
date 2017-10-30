@@ -1,0 +1,15 @@
+select_coverage -betf -module gpio_int...
+set_assign_scoring
+set_branch_scoring
+set_statement_scoring
+set_expr_scoring -all
+set_fsm_scoring -hold_transition
+set_fsm_arc_scoring
+
+set_glitch_strobe 1 ns
+set_toggle_strobe 1 ns
+set_covergroup -per_instance_default_one
+select_functional
+
+deselect_coverage -bet -module asyn_rst_syn_rls...
+deselect_coverage -bet -module signal_cross_rope_tie...
