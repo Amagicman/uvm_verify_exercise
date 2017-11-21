@@ -10,6 +10,7 @@ module gpio_int_top_tb;
 	event drv2dut_complete_event;
 
 	import uvm_pkg::*;
+	`include "reg_model.sv"
 	`include "gpio_int_sequence_item.sv"
 	`include "gpio_int_mon_transfer.sv"
 	`include "gpio_int_sequencer.sv"
@@ -22,7 +23,7 @@ module gpio_int_top_tb;
 	`include "bus_driver.sv"
 	`include "bus_monitor.sv"
 	`include "bus_agent.sv"
-	`include "reg_model.sv"
+	//`include "reg_model.sv"
 	`include "gpio_int_adapter.sv"
 	`include "gpio_int_model.sv"
 	`include "gpio_int_scoreboard.sv"
@@ -194,7 +195,9 @@ module gpio_int_top_tb;
 		uvm_config_db#(virtual bus_if)::set(null, "uvm_test_top.env.bus_agt.drv", "vif", dbus_if0);
 		uvm_config_db#(virtual bus_if)::set(null, "uvm_test_top.env.bus_agt.mon", "vif", dbus_if0);
 		uvm_config_db#(virtual backdoor_if)::set(null, "uvm_test_top", "vif", bk_if0);
-		uvm_config_db#(virtual backdoor_if)::set(null, "uvm_test_top.env.mdl", "vif", bk_if0);
+		`ifndef __NO_MODEL
+			uvm_config_db#(virtual backdoor_if)::set(null, "uvm_test_top.env.mdl", "vif", bk_if0);
+		`endif
 	end
 
 	//initial begin
