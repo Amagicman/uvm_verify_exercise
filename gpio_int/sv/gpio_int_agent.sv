@@ -59,7 +59,27 @@ class usr_agent#(type DRIVER=uvm_driver,MONITOR=uvm_monitor,SEQR=uvm_sequencer,S
 
 endclass
 
-`define usr_agent_decl(UNIT) typedef usr_agent#(UNIT``_driver,UNIT``_monitor, \
-        UNIT``_sequencer,UNIT``_sequence_item,UNIT``_mon_transfer) UNIT``_agent;
+//`define usr_agent_decl(UNIT) typedef usr_agent#(UNIT``_driver,UNIT``_monitor, \
+//        UNIT``_sequencer,UNIT``_sequence_item,UNIT``_mon_transfer) UNIT``_agent;
+//
+//`usr_agent_decl(gpio_int)
+class gpio_int_agent extends usr_agent #(gpio_int_driver, gpio_int_monitor, gpio_int_sequencer, gpio_int_sequence_item, gpio_int_mon_transfer);
 
-`usr_agent_decl(gpio_int)
+	reg_model p_rm;
+
+	function new(string name = "gpio_int_agent", uvm_component parent = null);
+		super.new(name, parent);
+	endfunction
+
+	virtual function void build_phase(uvm_phase phase);
+		super.build_phase(phase);
+	endfunction
+
+	virtual function void connect_phase(uvm_phase phase);
+		super.connect_phase(phase);
+		mon.p_rm = this.p_rm;
+	endfunction
+
+	`uvm_component_utils(gpio_int_agent)
+
+endclass : gpio_int_agent

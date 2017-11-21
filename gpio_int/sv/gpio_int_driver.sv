@@ -63,11 +63,13 @@ class gpio_int_driver extends usr_driver#(gpio_int_sequence_item, gpio_int_mon_t
 
    extern task main_phase(uvm_phase phase);
    extern task drive_one_pkt(gpio_int_sequence_item item);
-   extern task int_handle(gpio_int_sequence_item item);
+   extern task int_src_input(gpio_int_sequence_item item);
+   extern task int_ack_input(gpio_int_sequence_item item);
 endclass
 
 task gpio_int_driver::main_phase(uvm_phase phase);
   vif.INTA_N <= 1'b1;
+  //vif.INTA_N <= 1'b0;
   vif.int_err_lbus <= `ERR_LBUS'b0;
   vif.int_err_50m <= `ERR_50M'b0;
   vif.int_err_200m <= `ERR_200M'b0;
@@ -85,11 +87,6 @@ task gpio_int_driver::main_phase(uvm_phase phase);
 	  drv2mdl_item_ap.write(req);
       drive_one_pkt(req);
 	  repeat(2) @(posedge vif.clk[0]);
-	  rsp = new("rsp");
-	  rsp.set_id_info(req);
-	  seq_item_port.put_response(rsp);
-	  //#1000000;
-	  int_handle(req);
       seq_item_port.item_done();
 	  `ifdef __COV_ENABLE
 		tr_cov.sample_tr(req);
@@ -98,10 +95,49 @@ task gpio_int_driver::main_phase(uvm_phase phase);
 endtask
 
 task gpio_int_driver::drive_one_pkt(gpio_int_sequence_item item);
-   
    `uvm_info("gpio_int_driver", "begin to drive one pkt", UVM_HIGH);
-   //$display("\n\t===== the received pkt is : \n");//jg
-   //item.print();//jg
+   if(item.shake == ACK_AFTER_REQ) begin
+	   int_src_input(item);
+	   fork
+		   wait(vif.INTR);
+		   #(`PERIOD_CPU * 9);
+	   join_any
+	   disable fork;
+	   -> `DRV_OVER_EVT;
+	   int_ack_input(item);
+   end else begin
+	   int_ack_input(item);
+	   int_src_input(item);
+	   fork
+		   wait(vif.INTR);
+		   #(`PERIOD_CPU * 9);
+	   join_any
+	   disable fork;
+	   -> `DRV_OVER_EVT;
+   end
+
+   repeat(1) @(posedge vif.clk[0]);
+   vif.INTA_N <= 1'b1;
+
+   vif.int_err_lbus <= `ERR_LBUS'b0;
+   vif.int_err_50m <= `ERR_50M'b0;
+   vif.int_err_200m <= `ERR_200M'b0;
+   vif.int_err_400m <= `ERR_400M'b0;
+   vif.int_info_300m <= `INF_300M'b0;
+   vif.int_info_xaui <= `INF_XAUI'b0;
+   vif.int_info_50m <= `INF_50M'b0;
+   vif.int_info_400m <= `INF_400M'b0;
+   vif.int_shake_50m <= `SK_50M'b0;
+   vif.int_shake_bufd <= `SK_BUFD'b0;
+   vif.int_shake_100m <= `SK_100M'b0;
+
+   `uvm_info("gpio_int_driver", "end drive one pkt", UVM_HIGH);
+endtask
+
+task gpio_int_driver::int_src_input(gpio_int_sequence_item item);
+   
+   $display("\n\t===== the drived pkt is : \n");//jg
+   item.print();//jg
    repeat(3) @(posedge vif.clk[0]);
 	for (int i = 0; i < `INT_NUM; i++) begin
 		fork
@@ -201,25 +237,22 @@ task gpio_int_driver::drive_one_pkt(gpio_int_sequence_item item);
 	join
 
 	end
-
 	
-   `uvm_info("gpio_int_driver", "end drive one pkt", UVM_HIGH);
 endtask
 
-task gpio_int_driver::int_handle(gpio_int_sequence_item item);
-	fork
-		wait(vif.INTR);
-		#1000000;
-	join_any
-	disable fork;
+task gpio_int_driver::int_ack_input(gpio_int_sequence_item item);
+	//fork
+	//	wait(vif.INTR);
+	//	//#1000000;
+	//	#(`PERIOD_CPU * 9);
+	//join_any
+	//disable fork;
+	//-> `DRV_OVER_EVT;
 
-	if(vif.INTR)
+	//if(vif.INTR)
 	begin
 		repeat(item.del_to_ack) @(posedge vif.clk[0]);
-		vif.INTA_N <= 1'b0;
-		-> `DRV_OVER_EVT;
-		repeat(1) @(posedge vif.clk[0]);
-		vif.INTA_N <= 1'b1;
+		vif.INTA_N <= item.int_ack;
    end
 endtask
 
