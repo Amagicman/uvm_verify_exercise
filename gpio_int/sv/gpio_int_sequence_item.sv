@@ -1,15 +1,21 @@
 `ifndef GPIO_INT_SEQUENCE_ITEM
 `define GPIO_INT_SEQUENCE_ITEM
 
+typedef enum{ACK_AFTER_REQ, ACK_BEFORE_REQ} shake_type;
+
 class gpio_int_sequence_item extends uvm_sequence_item;
 
 	bit	[`INT_NUM-1:0]		has_int;
 	rand int unsigned int_bit;
+	rand bit unsigned int_ack;
+	rand shake_type shake;
 	rand int unsigned del_to_ack;//cycles of INTA_N goes low after INTR goes high
 
   `uvm_object_utils_begin(gpio_int_sequence_item)
 	`uvm_field_int(has_int, UVM_ALL_ON)
 	`uvm_field_int(int_bit, UVM_ALL_ON)
+	`uvm_field_int(int_ack, UVM_ALL_ON)
+	`uvm_field_enum(shake_type, shake, UVM_ALL_ON)
 	`uvm_field_int(del_to_ack, UVM_ALL_ON)
   `uvm_object_utils_end
 
@@ -22,7 +28,7 @@ class gpio_int_sequence_item extends uvm_sequence_item;
   }
 
   constraint del_to_ack_con {
-	  del_to_ack inside {[2:8]};
+	  del_to_ack inside {[0:4]};
   }
 
 function void post_randomize();

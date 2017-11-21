@@ -38,6 +38,7 @@ endclass
 class gpio_int_monitor extends usr_monitor#(gpio_int_mon_transfer);
 
    virtual gpio_int_if vif;
+   reg_model p_rm;
    cov_gpio_int_mtr mtr_cov;
 
    `uvm_component_utils(gpio_int_monitor)
@@ -56,6 +57,7 @@ class gpio_int_monitor extends usr_monitor#(gpio_int_mon_transfer);
 
    extern task main_phase(uvm_phase phase);
    extern task collect_one_pkt(gpio_int_mon_transfer mon_tr);
+   extern task read_int_state_reg(output bit [`INT_NUM-1:0] int_state);
 endclass
 
 task gpio_int_monitor::main_phase(uvm_phase phase);
@@ -75,6 +77,7 @@ endtask
 // num_collect : counter of transfers collected for monitor
 int num_collect = 0;
 task gpio_int_monitor::collect_one_pkt(gpio_int_mon_transfer mon_tr);
+	bit [`INT_NUM-1:0] int_state;
    while(1) begin
       @(posedge vif.clk[0]);
       if(vif.rstn_50m) break;
@@ -85,12 +88,36 @@ task gpio_int_monitor::collect_one_pkt(gpio_int_mon_transfer mon_tr);
    @(`DRV_OVER_EVT);
    begin
 	   mon_tr.INTR = vif.INTR;
+	   //mon_tr.INTR = 1'b1;
 	   mon_tr.INT_CODE = vif.INT_CODE;
+	   //read_int_state_reg(int_state);
+	   //mon_tr.int_state = int_state;
+	   mon_tr.int_state = `DUT.m_gpio_int_do.r_isr;
 
    num_collect++;
    `uvm_info("gpio_int_monitor", "end collect one pkt", UVM_HIGH);
    `uvm_info(get_type_name(), $sformatf("\n\n\t=======[#Monitor#] The NO.#%0d# tranfser collected is : \n%s", num_collect, mon_tr.sprint()), UVM_LOW);
    end
+endtask
+
+task gpio_int_monitor::read_int_state_reg(output bit [`INT_NUM-1:0] int_state);
+   uvm_status_e status;
+   uvm_reg_data_t sh_state, info_state0, info_state1, err_state0, err_state1;
+   bit [`INF_W-1:0] info_state;
+   bit [`ERR_W-1:0] err_state;
+
+   p_rm.gpio_int_rf.shake_state0.read(status, sh_state, UVM_FRONTDOOR);
+   p_rm.gpio_int_rf.info_state0.read(status, info_state0, UVM_FRONTDOOR);
+   p_rm.gpio_int_rf.info_state1.read(status, info_state1, UVM_FRONTDOOR);
+   p_rm.gpio_int_rf.error_state0.read(status, err_state0, UVM_FRONTDOOR);
+   p_rm.gpio_int_rf.error_state1.read(status, err_state1, UVM_FRONTDOOR);
+
+   info_state = (info_state1 << 32) | info_state0;
+   err_state = (err_state1 << 32) | err_state0;
+
+   int_state = (err_state << (`INF_W + `SK_W)) | (info_state << `SK_W) | sh_state;
+   `uvm_info(get_type_name(), $sformatf("int_state's value is %0h ", int_state), UVM_LOW)//jg
+	
 endtask
 
 `endif
