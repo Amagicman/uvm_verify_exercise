@@ -290,17 +290,15 @@ class gen_rand_intr_vseq extends base_vseq;
 	`uvm_object_utils(gen_rand_intr_vseq)
 
 	virtual task body();
+		gpio_int_sequence_item item;
 		gpio_int_cfg_fd_vseq cfg_seq;
 		int_rand_seq dseq;
 		get_int_state_seq int_state_seq;
-		gpio_int_read_int_state_fd_vseq state_vseq;
 		repeat (`LINE_NUM) begin
 			//`uvm_do(cfg_seq)
-			//fork
-				`uvm_do_on(dseq, p_sequencer.p_gpio_int_sqr)
-				`uvm_do_on(int_state_seq, p_sequencer.p_bus_sqr)
-				//`uvm_do(state_vseq)
-			//join
+			//`uvm_do_on(dseq, p_sequencer.p_gpio_int_sqr)
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_ack == 1'b0;})
+			`uvm_do_on(int_state_seq, p_sequencer.p_bus_sqr)
 		end
 	endtask : body
 

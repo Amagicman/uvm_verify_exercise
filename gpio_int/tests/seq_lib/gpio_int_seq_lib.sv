@@ -94,9 +94,6 @@ class int_rand_seq extends gpio_int_base_seq;
    
    virtual task body();
 	`uvm_do(req)
-	get_response(rsp);
-	`uvm_info("seq", "get one response", UVM_LOW)
-	//rsp.print();
    endtask
 
    `uvm_object_utils(int_rand_seq)
