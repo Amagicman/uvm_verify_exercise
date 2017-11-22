@@ -1,12 +1,15 @@
 SEED = `date +%s%N | cut -c 5-13`
-TESTCASE = test_gpio_int_int_code
-#TESTCASE = test_gpio_int_reg_rw
-#TESTCASE = test_gpio_int_priority
-LINE_NUM = 100
+#TESTCASE = test_intr_code
+#TESTCASE = test_reg_rw
+#TESTCASE = test_int_priority
+TESTCASE = test_int_same_domain_multi
+#TESTCASE = test_gpio_int_cov
+LINE_NUM = 10
 
 all:
 	irun -access +rwc +sv \
 		 +define+LINE_NUM=$(LINE_NUM) \
+		 +define+__NO_MODEL \
 		 -f filelist.f \
 		 -seed $(SEED) \
 		 -licqueue \

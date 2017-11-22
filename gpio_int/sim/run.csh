@@ -84,6 +84,9 @@ while ($#argv >0)
             endif
             shift
     breaksw
+    case "-no_model":
+            set IRUN_OPTS = "$IRUN_OPTS +define+__NO_MODEL"
+    breaksw
     case "-line_num":
             set LINE_NUM  = $2
             set LINE_NUM_CHK = `echo $LINE_NUM | sed "s/[0-9]//g"`
