@@ -56,7 +56,7 @@ function void gpio_int_env::connect_phase(uvm_phase phase);
        //o_agt.dut2scb_mtr_ap.connect(agt_scb_fifo.analysis_export);
        i_agt.dut2scb_mtr_ap.connect(agt_scb_fifo.analysis_export); //add by jg
        scb.gpio_int.dut2scb_mtr_blk_gp.connect(agt_scb_fifo.blocking_get_export); 
-       //mdl.p_rm = this.p_rm;
+       mdl.p_rm = this.p_rm;
    `endif
    i_agt.p_rm = this.p_rm;
 endfunction

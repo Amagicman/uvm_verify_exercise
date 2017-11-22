@@ -4,7 +4,6 @@
 `include "gpio_int_define.sv"
 `include "gpio_int_if.sv"
 `include "bus_if.sv"
-`include "backdoor_if.sv"
 
 module gpio_int_top_tb;
 	event drv2dut_complete_event;
@@ -29,7 +28,7 @@ module gpio_int_top_tb;
 	`include "gpio_int_scoreboard.sv"
 	`include "gpio_int_env.sv"
 	`include "gpio_int_vsqr.sv"
-	`include "gpio_int_seq_lib.sv"
+	//`include "gpio_int_seq_lib.sv"
 	`include "gpio_int_bus_seq_lib.sv"
 	`include "gpio_int_virtual_seq_lib.sv"
 	`include "base_test.sv"
@@ -43,7 +42,6 @@ module gpio_int_top_tb;
 
 	gpio_int_if gpio_int_if0(clk, rstn_50m);
 	bus_if dbus_if0(clk[1], rstn_50m);
-	backdoor_if bk_if0(clk[1], rstn_50m);
 
 	gpio_int gpio_int_dut(
 		.clk_cpu                 (clk[0]                            ),
@@ -194,10 +192,6 @@ module gpio_int_top_tb;
 		uvm_config_db#(virtual gpio_int_if)::set(null, "uvm_test_top.env.i_agt.mon", "vif", gpio_int_if0);
 		uvm_config_db#(virtual bus_if)::set(null, "uvm_test_top.env.bus_agt.drv", "vif", dbus_if0);
 		uvm_config_db#(virtual bus_if)::set(null, "uvm_test_top.env.bus_agt.mon", "vif", dbus_if0);
-		uvm_config_db#(virtual backdoor_if)::set(null, "uvm_test_top", "vif", bk_if0);
-		`ifndef __NO_MODEL
-			uvm_config_db#(virtual backdoor_if)::set(null, "uvm_test_top.env.mdl", "vif", bk_if0);
-		`endif
 	end
 
 	//initial begin
