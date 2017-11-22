@@ -26,7 +26,7 @@ class base_vseq extends uvm_sequence;
 
 endclass : base_vseq
 
-// SEQUENCE : gpio_int_reg_rst_val_fd__vseq
+// SEQUENCE : gpio_int_reg_rst_val_fd_vseq
 class gpio_int_reg_rst_val_fd_vseq extends base_vseq;
 
 	function new(string name = "gpio_int_reg_rst_val_fd_vseq");
@@ -121,103 +121,6 @@ class gpio_int_cfg_fd_vseq extends base_vseq;
 	endtask : body
 endclass : gpio_int_cfg_fd_vseq
 
-// SEQUENCE : gpio_int_default_cfg_fd_vseq
-class gpio_int_default_cfg_fd_vseq extends base_vseq;
-
-	function new(string name = "gpio_int_default_cfg_fd_vseq");
-		super.new(name);
-	endfunction
-
-	`uvm_object_utils(gpio_int_default_cfg_fd_vseq)
-
-	virtual task body();
-
-      uvm_status_e   status;
-      uvm_reg_data_t value;
-	  uvm_reg_data_t sh_mask, info_mask0, info_mask1, err_mask0, err_mask1;
-
-	  // Configuration values of registers
-	  //$display("\n\t==============After config,  value of registers : =================\n");
-	  sh_mask = {`SK_W{1'b1}};
-      p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.write(status, sh_mask, UVM_FRONTDOOR);
-      p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("r_sh_mask0's default config is %0h", value), UVM_LOW)
-
-	  info_mask0 = {32{1'b1}};
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask0.write(status, info_mask0, UVM_FRONTDOOR);
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("r_info_mask0's default config is %0h", value), UVM_LOW)
-
-	  info_mask1 = {`INF_W-32{1'b1}};
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask1.write(status, info_mask1, UVM_FRONTDOOR);
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask1.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("r_info_mask1's default config is %0h", value), UVM_LOW)
-
-	  err_mask0 = {32{1'b1}};
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask0.write(status, err_mask0, UVM_FRONTDOOR);
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("r_err_mask0's default config is %0h", value), UVM_LOW)
-
-	  err_mask1 = {`ERR_W-32{1'b1}};
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask1.write(status, err_mask1, UVM_FRONTDOOR);
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask1.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("r_err_mask1's default config is %0h", value), UVM_LOW)
-
-	  //$display("\n\t============== Registers config end =================\n");
-
-	endtask : body
-
-endclass : gpio_int_default_cfg_fd_vseq
-
-// SEQUENCE : gpio_int_mask_clr_fd_vseq
-class gpio_int_mask_clr_fd_vseq extends base_vseq;
-
-	function new(string name = "gpio_int_mask_clr_fd_vseq");
-		super.new(name);
-	endfunction
-
-	`uvm_object_utils(gpio_int_mask_clr_fd_vseq)
-
-	virtual task body();
-
-      uvm_status_e   status;
-      uvm_reg_data_t value;
-	  uvm_reg_data_t sh_mask, info_mask0, info_mask1, err_mask0, err_mask1;
-
-	  // Configuration values of registers
-	  //$display("\n\t==============After config,  value of registers : =================\n");
-	  sh_mask = {`SK_W{1'b0}};
-      p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.write(status, sh_mask, UVM_FRONTDOOR);
-      //p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.read(status, value, UVM_FRONTDOOR);
-      //`uvm_info(get_type_name(), $sformatf("r_sh_mask0's default config is %0h", value), UVM_LOW)
-
-	  info_mask0 = {32{1'b0}};
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask0.write(status, info_mask0, UVM_FRONTDOOR);
-      //p_sequencer.p_rm.gpio_int_rf.r_info_mask0.read(status, value, UVM_FRONTDOOR);
-      //`uvm_info(get_type_name(), $sformatf("r_info_mask0's default config is %0h", value), UVM_LOW)
-
-	  info_mask1 = {`INF_W-32{1'b0}};
-      p_sequencer.p_rm.gpio_int_rf.r_info_mask1.write(status, info_mask1, UVM_FRONTDOOR);
-      //p_sequencer.p_rm.gpio_int_rf.r_info_mask1.read(status, value, UVM_FRONTDOOR);
-      //`uvm_info(get_type_name(), $sformatf("r_info_mask1's default config is %0h", value), UVM_LOW)
-
-	  err_mask0 = {32{1'b0}};
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask0.write(status, err_mask0, UVM_FRONTDOOR);
-      //p_sequencer.p_rm.gpio_int_rf.r_err_mask0.read(status, value, UVM_FRONTDOOR);
-      //`uvm_info(get_type_name(), $sformatf("r_err_mask0's default config is %0h", value), UVM_LOW)
-
-	  err_mask1 = {`ERR_W-32{1'b0}};
-      p_sequencer.p_rm.gpio_int_rf.r_err_mask1.write(status, err_mask1, UVM_FRONTDOOR);
-      //p_sequencer.p_rm.gpio_int_rf.r_err_mask1.read(status, value, UVM_FRONTDOOR);
-      //`uvm_info(get_type_name(), $sformatf("r_err_mask1's default config is %0h", value), UVM_LOW)
-
-	  //$display("\n\t============== Registers config end =================\n");
-
-	endtask : body
-
-endclass : gpio_int_mask_clr_fd_vseq
-
-
 // SEQUENCE : gpio_int_read_int_state_fd_vseq
 class gpio_int_read_int_state_fd_vseq extends base_vseq;
 
@@ -252,57 +155,84 @@ class gpio_int_read_int_state_fd_vseq extends base_vseq;
 
   endclass : gpio_int_read_int_state_fd_vseq
 
-// SEQUENCE : mask_set_backdoor_vseq
-// Access registers through backdoor : write mask registers
-class mask_set_backdoor_vseq extends base_vseq;
-	reg_model rm;
-	`uvm_object_utils(mask_set_backdoor_vseq)
+//----------------------------------------------------------------------------
+// SEQUENCE : generate random interrupt requests for int_code and int_state compare
+//----------------------------------------------------------------------------
+class gpio_int_intr_code_vseq extends base_vseq;
 
-	function new(string name = "mask_set_backdoor_vseq");
+	function new(string name = "gpio_int_intr_code_vseq");
 		super.new(name);
 	endfunction
-
-	task body();
-		uvm_status_e status;
-		uvm_reg_data_t value;
-
-		fork
-			p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.poke(status, {`SK_W{1'b1}});
-			p_sequencer.p_rm.gpio_int_rf.r_info_mask0.poke(status, {32{1'b1}});
-			p_sequencer.p_rm.gpio_int_rf.r_info_mask1.poke(status, {`INF_W-32{1'b1}});
-			p_sequencer.p_rm.gpio_int_rf.r_err_mask0.poke(status, {`ERR_W{1'b1}});
-			p_sequencer.p_rm.gpio_int_rf.r_err_mask1.poke(status, {`ERR_W-32{1'b1}});
-		join
-			p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.read(status, value, UVM_FRONTDOOR);
-			//p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.peek(status, value);
-
-	endtask
-endclass : mask_set_backdoor_vseq
-
-//----------------------------------------------------------------------------
-// SEQUENCE : generate random interrupt requests
-//----------------------------------------------------------------------------
-class gen_rand_intr_vseq extends base_vseq;
-
-	function new(string name = "gen_rand_intr_vseq");
-		super.new(name);
-	endfunction
-	`uvm_object_utils(gen_rand_intr_vseq)
+	`uvm_object_utils(gpio_int_intr_code_vseq)
 
 	virtual task body();
 		gpio_int_sequence_item item;
 		gpio_int_cfg_fd_vseq cfg_seq;
-		int_rand_seq dseq;
 		get_int_state_seq int_state_seq;
 		repeat (`LINE_NUM) begin
 			//`uvm_do(cfg_seq)
-			//`uvm_do_on(dseq, p_sequencer.p_gpio_int_sqr)
-			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_ack == 1'b0;})
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE; item.int_ack == 1'b0;})
 			`uvm_do_on(int_state_seq, p_sequencer.p_bus_sqr)
 		end
 	endtask : body
 
-endclass : gen_rand_intr_vseq 
+endclass : gpio_int_intr_code_vseq
+
+//----------------------------------------------------------------------------
+// SEQUENCE : generate random interrupt requests from the same clock domain 
+//----------------------------------------------------------------------------
+class gpio_int_same_domain_multi_vseq extends base_vseq;
+	rand bit [`INT_NUM-1:0] multi_int_r;
+	function new(string name = "gpio_int_same_domain_multi_vseq");
+		super.new(name);
+	endfunction
+	`uvm_object_utils(gpio_int_same_domain_multi_vseq)
+
+	constraint multi_int_ct {
+		multi_int_r inside {
+		//1<<108,
+		//1<<107,
+		//[1<<104:{`ERR_200M'b{1}}<<104],
+		[1<<65:{`ERR_400M{1'b1}}<<65],
+		[1<<63:{`INF_300M{1'b1}}<<63]
+	};
+	}
+
+	virtual task body();
+		gpio_int_sequence_item item;
+		gpio_int_cfg_fd_vseq cfg_seq;
+		repeat (`LINE_NUM) begin
+			`uvm_do(cfg_seq)
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == MULTI;
+															   item.multi_int == multi_int_r;
+															   item.int_ack == 1'b0;})
+		end
+	endtask : body
+
+endclass : gpio_int_same_domain_multi_vseq_
+
+//----------------------------------------------------------------------------
+// SEQUENCE : generate random interrupt requests for int_src, int_code and int_state coverage
+//----------------------------------------------------------------------------
+class gpio_int_cov_vseq extends base_vseq;
+
+	function new(string name = "gpio_int_cov_vseq");
+		super.new(name);
+	endfunction
+	`uvm_object_utils(gpio_int_cov_vseq)
+
+	virtual task body();
+		gpio_int_sequence_item item;
+		gpio_int_cfg_fd_vseq cfg_seq;
+		get_int_state_seq int_state_seq;
+		repeat (`LINE_NUM) begin
+			`uvm_do(cfg_seq)
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE; item.int_ack == 0;})
+			`uvm_do_on(int_state_seq, p_sequencer.p_bus_sqr)
+		end
+	endtask : body
+
+endclass : gpio_int_cov_vseq
 
 //----------------------------------------------------------------------------
 // SEQUENCE : generate interrupt requests of different types for priority comparation 
@@ -316,23 +246,18 @@ class intr_priority_compare_vseq extends base_vseq;
 	`uvm_object_utils(intr_priority_compare_vseq)
 
 	virtual task body();
-		int_err_seq err_seq;
-		int_info_seq info_seq;
-		int_shake_seq sh_seq;
+		gpio_int_sequence_item item;
 
-		mask_set_backdoor_vseq mask_set_vseq;
-		
 		repeat(`LINE_NUM) begin
-			fork
-				`uvm_do_on(sh_seq, p_sequencer.p_gpio_int_sqr)
-				`uvm_do_on(info_seq, p_sequencer.p_gpio_int_sqr)
-				`uvm_do_on(err_seq, p_sequencer.p_gpio_int_sqr)
-			join
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE; 
+															   item.int_ack == 1'b1;})
 		end
 
-		#100000;
-		`uvm_do(mask_set_vseq)
-		#1000;
+		repeat(`LINE_NUM) begin
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE;
+															   item.int_bit == 0;
+															   item.int_ack == 1'b0;})
+		end
 
 	endtask : body
 
