@@ -7,6 +7,8 @@ TESTCASE = test_intr_code
 LINE_NUM = 10
 HAVE_MODEL = yes
 
+default:all
+
 w:wave
 
 h:help
