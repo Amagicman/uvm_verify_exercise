@@ -8,7 +8,7 @@
 # ====================================================
 
 #block path set
-setenv BLOCKPATH	"/home/jg/workspace/PJ001_NP3/verify/sv_verify_env/gpio_int"
+setenv BLOCKPATH	"/home/jg/workspace/PJ001_NP3/verify/gpio_int_verify/gpio_int"
 
 ##SET PATH
 setenv AST_PATH      "$BLOCKPATH/ast"
