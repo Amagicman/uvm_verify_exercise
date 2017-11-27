@@ -89,30 +89,40 @@ class gpio_int_cfg_fd_vseq extends base_vseq;
 	  sh_mask = $urandom_range(0, {{32-`SK_W{1'b0}},{`SK_W{1'b1}}});
       p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.write(status, sh_mask, UVM_FRONTDOOR);
       p_sequencer.p_rm.gpio_int_rf.r_sh_mask0.read(status, value, UVM_FRONTDOOR);
+	  if(value != sh_mask)
+		  `uvm_error(get_type_name(), "r_sh_mask0 read write error!")
       `uvm_info(get_type_name(), $sformatf("r_sh_mask0's config value is %0h", value), UVM_LOW)
 	  //$display("\n\t[%s] r_sh_mask0's config value is 0x%0h", get_type_name, value);
 
 	  info_mask0 = $urandom_range(0, {32{1'b1}});
       p_sequencer.p_rm.gpio_int_rf.r_info_mask0.write(status, info_mask0, UVM_FRONTDOOR);
       p_sequencer.p_rm.gpio_int_rf.r_info_mask0.read(status, value, UVM_FRONTDOOR);
+	  if(value != info_mask0)
+		  `uvm_error(get_type_name(), "r_info_mask0 read write error!")
       `uvm_info(get_type_name(), $sformatf("r_info_mask0's config value is %0h", value), UVM_LOW)
 	  //$display("\t[%s] r_info_mask0's config value is 0x%0h", get_type_name, value);
 
 	  info_mask1 = $urandom_range(0, {{64-`INF_W{1'b0}},{`INF_W-32{1'b1}}});
       p_sequencer.p_rm.gpio_int_rf.r_info_mask1.write(status, info_mask1, UVM_FRONTDOOR);
       p_sequencer.p_rm.gpio_int_rf.r_info_mask1.read(status, value, UVM_FRONTDOOR);
+	  if(value != info_mask1)
+		  `uvm_error(get_type_name(), "r_info_mask1 read write error!")
       `uvm_info(get_type_name(), $sformatf("r_info_mask1's config value is %0h", value), UVM_LOW)
 	  //$display("\t[%s] r_info_mask1's config value is 0x%0h", get_type_name, value);
 
 	  err_mask0 = $urandom_range(0, {32{1'b1}});
       p_sequencer.p_rm.gpio_int_rf.r_err_mask0.write(status, err_mask0, UVM_FRONTDOOR);
       p_sequencer.p_rm.gpio_int_rf.r_err_mask0.read(status, value, UVM_FRONTDOOR);
+	  if(value != err_mask0)
+		  `uvm_error(get_type_name(), "r_err_mask0 read write error!")
       `uvm_info(get_type_name(), $sformatf("r_err_mask0's config value is %0h", value), UVM_LOW)
 	  //$display("\t[%s] r_err_mask0's config value is 0x%0h", get_type_name, value);
 
 	  err_mask1 = $urandom_range(0, {{64-`ERR_W{1'b0}},{`ERR_W-32{1'b1}}});
       p_sequencer.p_rm.gpio_int_rf.r_err_mask1.write(status, err_mask1, UVM_FRONTDOOR);
       p_sequencer.p_rm.gpio_int_rf.r_err_mask1.read(status, value, UVM_FRONTDOOR);
+	  if(value != err_mask1)
+		  `uvm_error(get_type_name(), "r_err_mask1 read write error!")
       `uvm_info(get_type_name(), $sformatf("r_err_mask1's config value is %0h", value), UVM_LOW)
 	  //$display("\t[%s] r_err_mask1's config value is 0x%0h\n", get_type_name, value);
 
@@ -128,28 +138,48 @@ class gpio_int_read_int_state_fd_vseq extends base_vseq;
 		super.new(name);
 	endfunction
 
+	rand bit [`INT_NUM-1:0] int_state_c;
+
 	`uvm_object_utils(gpio_int_read_int_state_fd_vseq)
 
 	virtual task body();
 
       uvm_status_e   status;
-      uvm_reg_data_t value;
+      //uvm_reg_data_t value;
+	  uvm_reg_data_t sh_state, info_state0, info_state1, err_state0, err_state1;
+	  uvm_reg_data_t sh_state_c, info_state0_c, info_state1_c, err_state0_c, err_state1_c;
 
-      p_sequencer.p_rm.gpio_int_rf.shake_state0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("shake_state0's value is %0h", value), UVM_LOW)
-	  //$display("\n\t[%s] shake_state is 0x%0h", get_type_name, value);
-      p_sequencer.p_rm.gpio_int_rf.info_state0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("info_state0's value is %0h", value), UVM_LOW)
-	  //$display("\t[%s] info_state0 is 0x%0h", get_type_name, value);
-      p_sequencer.p_rm.gpio_int_rf.info_state1.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("info_state1's value is %0h", value), UVM_LOW)
-	  //$display("\t[%s] info_state1 is 0x%0h", get_type_name, value);
-      p_sequencer.p_rm.gpio_int_rf.error_state0.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("error_state0's value is %0h", value), UVM_LOW)
-	  //$display("\t[%s] error_state0 is 0x%0h", get_type_name, value);
-      p_sequencer.p_rm.gpio_int_rf.error_state1.read(status, value, UVM_FRONTDOOR);
-      `uvm_info(get_type_name(), $sformatf("error_state1's value is %0h", value), UVM_LOW)
-	  //$display("\t[%s] error_state1 is 0x%0h\n", get_type_name, value);
+	  sh_state_c = int_state_c & {`SK_W{1'b1}} ;
+	  info_state0_c = (int_state_c >> `SK_W) & {32{1'b1}};
+	  info_state1_c = (int_state_c >> (32 + `SK_W)) & {`INF_W-32{1'b1}};
+	  err_state0_c = (int_state_c >> (`SK_W + `INF_W)) & {32{1'b1}};
+	  err_state1_c = (int_state_c >> (32 + `SK_W + `INF_W)) & {`ERR_W-32{1'b1}};
+
+      p_sequencer.p_rm.gpio_int_rf.shake_state0.read(status, sh_state, UVM_FRONTDOOR);
+	  if(sh_state != sh_state_c)
+		  `uvm_error(get_type_name(), "shake_state0 read error!")
+      `uvm_info(get_type_name(), $sformatf("shake_state0's value is %0h", sh_state), UVM_LOW)
+	  //$display("\n\t[%s] shake_state is 0x%0h", get_type_name, sh_state);
+      p_sequencer.p_rm.gpio_int_rf.info_state0.read(status, info_state0, UVM_FRONTDOOR);
+	  if(info_state0 != info_state0_c)
+		  `uvm_error(get_type_name(), "info_state0 read error!")
+      `uvm_info(get_type_name(), $sformatf("info_state0's value is %0h", info_state0), UVM_LOW)
+	  //$display("\t[%s] info_state0 is 0x%0h", get_type_name, info_state0);
+      p_sequencer.p_rm.gpio_int_rf.info_state1.read(status, info_state1, UVM_FRONTDOOR);
+	  if(info_state1 != info_state1_c)
+		  `uvm_error(get_type_name(), "info_state1 read error!")
+      `uvm_info(get_type_name(), $sformatf("info_state1's value is %0h", info_state1), UVM_LOW)
+	  //$display("\t[%s] info_state1 is 0x%0h", get_type_name, info_state1);
+      p_sequencer.p_rm.gpio_int_rf.error_state0.read(status, err_state0, UVM_FRONTDOOR);
+	  if(err_state0 != err_state0_c)
+		  `uvm_error(get_type_name(), "err_state0 read error!")
+      `uvm_info(get_type_name(), $sformatf("error_state0's value is %0h", err_state0), UVM_LOW)
+	  //$display("\t[%s] error_state0 is 0x%0h", get_type_name, err_state0);
+      p_sequencer.p_rm.gpio_int_rf.error_state1.read(status, err_state1, UVM_FRONTDOOR);
+	  if(err_state1 != err_state1_c)
+		  `uvm_error(get_type_name(), "err_state1 read error!")
+      `uvm_info(get_type_name(), $sformatf("error_state1's value is %0h", err_state1), UVM_LOW)
+	  //$display("\t[%s] error_state1 is 0x%0h\n", get_type_name, err_state1);
 
 	endtask
 
@@ -209,7 +239,7 @@ class gpio_int_same_domain_multi_vseq extends base_vseq;
 		end
 	endtask : body
 
-endclass : gpio_int_same_domain_multi_vseq_
+endclass : gpio_int_same_domain_multi_vseq
 
 //----------------------------------------------------------------------------
 // SEQUENCE : generate random interrupt requests for int_src, int_code and int_state coverage
@@ -269,6 +299,8 @@ class reg_rw_vseq extends base_vseq;
 		super.new(name);
 	endfunction
 
+	rand bit [`INT_NUM-1:0] int_state_c_r;
+
 	`uvm_object_utils(reg_rw_vseq)
 
 	virtual task body();
@@ -278,8 +310,8 @@ class reg_rw_vseq extends base_vseq;
 
 		repeat (`LINE_NUM) begin
 			`uvm_do(cfg_vseq)
-			`uvm_do(wr_state_seq)
-			`uvm_do(get_state_vseq)
+			`uvm_do_with(wr_state_seq, {wr_state_seq.int_state == int_state_c_r;})
+			`uvm_do_with(get_state_vseq, {get_state_vseq.int_state_c == int_state_c_r;})
 		end
 	endtask
 endclass : reg_rw_vseq

@@ -88,6 +88,7 @@ class gpio_int_state_wr_seq extends uvm_sequence;
 	`uvm_object_utils(gpio_int_state_wr_seq)
 
 	virtual task body();
+			`uvm_info(get_type_name(), $sformatf("int_state's write value is %0h ", int_state), UVM_LOW)//jg
 			`DUT.m_gpio_int_do.r_isr = int_state;
 	endtask
 endclass : gpio_int_state_wr_seq
