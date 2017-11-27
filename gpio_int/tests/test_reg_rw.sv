@@ -19,5 +19,5 @@ function void test_reg_rw::build_phase(uvm_phase phase);
    uvm_config_db#(uvm_object_wrapper)::set(this, 
                                            "v_sqr.main_phase", 
                                            "default_sequence", 
-                                           reg_rw_vseq::type_id::get());
+                                           reg_rw_comp_vseq::type_id::get());
 endfunction

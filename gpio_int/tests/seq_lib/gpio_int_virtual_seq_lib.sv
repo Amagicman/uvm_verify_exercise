@@ -308,12 +308,27 @@ class reg_rw_vseq extends base_vseq;
 		gpio_int_state_wr_seq wr_state_seq;
 		gpio_int_read_int_state_fd_vseq get_state_vseq;
 
-		repeat (`LINE_NUM) begin
-			`uvm_do(cfg_vseq)
-			`uvm_do_with(wr_state_seq, {wr_state_seq.int_state == int_state_c_r;})
-			`uvm_do_with(get_state_vseq, {get_state_vseq.int_state_c == int_state_c_r;})
-		end
+		`uvm_do(cfg_vseq)
+		`uvm_do_with(wr_state_seq, {wr_state_seq.int_state == int_state_c_r;})
+		`uvm_do_with(get_state_vseq, {get_state_vseq.int_state_c == int_state_c_r;})
 	endtask
 endclass : reg_rw_vseq
+
+class reg_rw_comp_vseq extends base_vseq;
+
+	function new(string name = "reg_value_comp_vseq");
+		super.new(name);
+	endfunction
+
+	`uvm_object_utils(reg_rw_comp_vseq)
+
+	virtual task body();
+		reg_rw_vseq reg_rw;
+
+		repeat (`LINE_NUM) begin
+			`uvm_do(reg_rw)
+		end
+	endtask
+endclass : reg_rw_comp_vseq
 
 `endif
