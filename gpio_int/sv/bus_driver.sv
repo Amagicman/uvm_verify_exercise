@@ -99,7 +99,10 @@ task bus_driver::drive_data_phase(bus_transaction tr);
 		vif.rd_valid <= 1'b1;
 		tr.rd_data = vif.o_datout_50m;
 	end
-		vif.i_csn_50m <= 1'b1;
+	@(posedge vif.clk_50m);
+	vif.i_csn_50m <= 1'b1;
+	vif.wr_valid <= 1'b0;
+	vif.rd_valid <= 1'b0;
 endtask
 
 `endif

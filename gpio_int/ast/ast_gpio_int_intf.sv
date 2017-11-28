@@ -24,15 +24,15 @@ a_ast_gpio_int_intf_REST_CHK_2 : assert property(a_ast_gpio_int_intf_REST_CHK(db
 
 // Bus write
 property a_ast_gpio_int_intf_data_csn_wr(CLK,RSTN,BUS_WR,CS_N,VALID);
-	@(posedge CLK) disable iff(~RSTN)
-	$fell(CS_N) && BUS_WR |-> VALID==1'b1;
+	@(posedge CLK)
+	$fell(CS_N) && BUS_WR |=> VALID==1'b1;
 endproperty
 
 a_ast_gpio_int_intf_data_csn_wr_0 : assert property(a_ast_gpio_int_intf_data_csn_wr(dbus_if0.clk_50m,dbus_if0.rstn_50m,dbus_if0.i_wr_50m,dbus_if0.i_csn_50m,dbus_if0.wr_valid));
 
 // Bus read
 property a_ast_gpio_int_intf_data_csn_rd(CLK,RSTN,BUS_RD,CS_N,VALID);
-	@(posedge CLK) disable iff(~RSTN)
+	@(posedge CLK)
 	$fell(CS_N) && BUS_RD |=> ##6 VALID==1'b1;
 endproperty
 
@@ -40,8 +40,8 @@ a_ast_gpio_int_intf_data_csn_rd_0 : assert property(a_ast_gpio_int_intf_data_csn
 
 // interrupt shakehand
 property a_ast_gpio_int_intf_shakehand(CLK,RSTN,INTR,INTA_N);
-	@(posedge CLK) disable iff(~RSTN)
-	$fell(INTA_N) && (INTR) |=> INTR==1'b0;
+	@(posedge CLK)
+	($fell(INTA_N) && (INTR)) || ($fell(INTA_N) && $rose(INTR)) || (~INTA_N) && $rose(INTR) |=> INTR==1'b0;
 endproperty
 
 a_ast_gpio_int_intf_shakehand_0 : assert property(a_ast_gpio_int_intf_shakehand(gpio_int_if0.clk[0],gpio_int_if0.rstn_50m,gpio_int_if0.INTR,gpio_int_if0.INTA_N));
