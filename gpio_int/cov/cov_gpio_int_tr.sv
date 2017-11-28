@@ -8,8 +8,14 @@ class cov_gpio_int_seq;
 
 	covergroup cg_gpio_int_intr@(sample_tr_evt);
 		cp_gpio_int_type : coverpoint tr.int_bit {
-			bins int_bit_type[64] = {[0:`INT_NUM]};
+			bins int_bit_type[64] = {[0:`INT_NUM-1]};
 		}
+
+		cp_gpio_int_trig : coverpoint tr.trig {
+			bins int_trig_type[2] = {LEVEL, EDGE};
+		}
+
+		cross_int_bit_trig : cross cp_gpio_int_type, cp_gpio_int_trig;
 	endgroup
 
 	string name;
