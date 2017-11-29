@@ -22,9 +22,9 @@ class gpio_int_sequence_item extends uvm_sequence_item;
 		`uvm_field_int(multi_int, UVM_ALL_ON)
 	end
 	if(int_num == SINGLE) begin
-		`uvm_field_int(has_int, UVM_ALL_ON)
+		`uvm_field_int(int_bit, UVM_ALL_ON)
 	end
-	`uvm_field_int(int_bit, UVM_ALL_ON)
+	`uvm_field_int(has_int, UVM_ALL_ON)
 	`uvm_field_enum(trig_type, trig, UVM_ALL_ON)
 	`uvm_field_int(int_ack, UVM_ALL_ON)
 	`uvm_field_enum(shake_type, shake, UVM_ALL_ON)

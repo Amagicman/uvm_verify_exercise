@@ -110,32 +110,32 @@ class get_int_state_seq extends gpio_int_bus_base_seq;
 		// sh_state0 : read
 		`uvm_do_with(m_trans, {m_trans.addr == `P_SH_STA_ADDR0;
 							   m_trans.bus_op == BUS_RD;})
-		//`uvm_info(get_type_name(), $sformatf("sh_state0's value is %0h", m_trans.rd_data), UVM_LOW)
-		$display("\n\t[%s] sh_state0 is 0x%0h", get_type_name, m_trans.rd_data);
+		`uvm_info(get_type_name(), $sformatf("sh_state0's value is %0h", m_trans.rd_data), UVM_LOW)
+		//$display("\n\t[%s] sh_state0 is 0x%0h", get_type_name, m_trans.rd_data);
 
 		// info_state0: read
 		`uvm_do_with(m_trans, {m_trans.addr == `P_INFO_STA_ADDR0;
 							   m_trans.bus_op == BUS_RD;})
-		//`uvm_info(get_type_name(), $sformatf("info_state0's value is %0h", m_trans.rd_data), UVM_LOW)
-		$display("\t[%s] info_state0 is 0x%0h", get_type_name, m_trans.rd_data);
+		`uvm_info(get_type_name(), $sformatf("info_state0's value is %0h", m_trans.rd_data), UVM_LOW)
+		//$display("\t[%s] info_state0 is 0x%0h", get_type_name, m_trans.rd_data);
 
 		// info_state1: read
 		`uvm_do_with(m_trans, {m_trans.addr == `P_INFO_STA_ADDR1;
 							   m_trans.bus_op == BUS_RD;})
-		//`uvm_info(get_type_name(), $sformatf("info_state1's value is %0h", m_trans.rd_data), UVM_LOW)
-		$display("\t[%s] info_state1 is 0x%0h", get_type_name, m_trans.rd_data);
+		`uvm_info(get_type_name(), $sformatf("info_state1's value is %0h", m_trans.rd_data), UVM_LOW)
+		//$display("\t[%s] info_state1 is 0x%0h", get_type_name, m_trans.rd_data);
 
 		// err_state0: read
 		`uvm_do_with(m_trans, {m_trans.addr == `P_ERR_STA_ADDR0;
 							   m_trans.bus_op == BUS_RD;})
-		//`uvm_info(get_type_name(), $sformatf("err_state0's value is %0h", m_trans.rd_data), UVM_LOW)
-		$display("\t[%s] err_state0 is 0x%0h", get_type_name, m_trans.rd_data);
+		`uvm_info(get_type_name(), $sformatf("err_state0's value is %0h", m_trans.rd_data), UVM_LOW)
+		//$display("\t[%s] err_state0 is 0x%0h", get_type_name, m_trans.rd_data);
 
 		// err_state1: read
 		`uvm_do_with(m_trans, {m_trans.addr == `P_ERR_STA_ADDR1;
 							   m_trans.bus_op == BUS_RD;})
-		//`uvm_info(get_type_name(), $sformatf("err_state1's value is %0h", m_trans.rd_data), UVM_LOW)
-		$display("\t[%s] err_state1 is 0x%0h\n", get_type_name, m_trans.rd_data);
+		`uvm_info(get_type_name(), $sformatf("err_state1's value is %0h", m_trans.rd_data), UVM_LOW)
+		//$display("\t[%s] err_state1 is 0x%0h\n", get_type_name, m_trans.rd_data);
 
 	endtask
 
