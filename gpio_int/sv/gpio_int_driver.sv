@@ -71,11 +71,12 @@ endclass
 task gpio_int_driver::main_phase(uvm_phase phase);
   signal_reset();
   @(posedge vif.clk[0] iff vif.rstn_50m == 1);
+   repeat(3) @(posedge vif.clk[0]);
    while(1) begin
       seq_item_port.get_next_item(req);
 	  drv2mdl_item_ap.write(req);
       drive_one_pkt(req);
-	  repeat(2) @(posedge vif.clk[0]);
+	  repeat(1) @(posedge vif.clk[0]);
       seq_item_port.item_done();
 	  `ifdef __COV_ENABLE
 		tr_cov.sample_tr(req);
@@ -119,7 +120,7 @@ task gpio_int_driver::int_src_input(gpio_int_sequence_item item);
    
    $display("\n\t===== the drived pkt is : \n");//jg
    item.print();//jg
-   repeat(3) @(posedge vif.clk[0]);
+   repeat(1) @(posedge vif.clk[0]);
    fork
 	   vif.int_err_lbus <= item.has_int[108];
 
@@ -186,7 +187,7 @@ task gpio_int_driver::int_src_input(gpio_int_sequence_item item);
 
 	fork
 		wait(vif.INTR);
-		#(`PERIOD_CPU * 9);
+		#(`PERIOD_CPU * 6);
 	join_any
 	disable fork;
 	-> `DRV_OVER_EVT;

@@ -1,8 +1,9 @@
-SEED = `date +%s%N | cut -c 5-13`
+SEED = `date +%N`
 TESTCASE = test_intr_code
 #TESTCASE = test_reg_rw
 #TESTCASE = test_int_priority
 #TESTCASE = test_int_same_domain_multi
+#TESTCASE = test_int_same_int_cont
 #TESTCASE = test_gpio_int_cov
 LINE_NUM = 10
 HAVE_MODEL = yes

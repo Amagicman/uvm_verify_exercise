@@ -213,6 +213,18 @@ endclass : gpio_int_intr_code_vseq
 //----------------------------------------------------------------------------
 class gpio_int_same_domain_multi_vseq extends base_vseq;
 	rand bit [`INT_NUM-1:0] multi_int_r;
+	rand bit int_lbus_raw;
+	rand bit int_50m_err_raw;
+	rand bit [`INF_50M-1:0] int_50m_info_raw;
+	rand bit int_50m_sk_raw;
+	rand bit [`SK_100M-1:0] int_100m_sk_raw;
+	rand bit [`ERR_200M-1:0] int_200m_err_raw;
+	rand bit [`INF_300M-1:0] int_300m_info_raw;
+	rand bit [`ERR_400M-1:0] int_400m_err_raw;
+	rand bit [`INF_400M-1:0] int_400m_info_raw;
+	rand bit [`INF_XAUI-1:0] int_xaui_info_raw;
+	rand bit [`SK_BUFD-1:0] int_bufd_sk_raw;
+
 	function new(string name = "gpio_int_same_domain_multi_vseq");
 		super.new(name);
 	endfunction
@@ -220,11 +232,14 @@ class gpio_int_same_domain_multi_vseq extends base_vseq;
 
 	constraint multi_int_ct {
 		multi_int_r inside {
-		//1<<108,
-		//1<<107,
-		//[1<<104:{`ERR_200M'b{1}}<<104],
-		[1<<65:{`ERR_400M{1'b1}}<<65],
-		[1<<63:{`INF_300M{1'b1}}<<63]
+			int_lbus_raw << 108,
+			int_50m_err_raw << 107 | int_50m_info_raw << 54 | int_50m_sk_raw << 14,
+			int_100m_sk_raw,
+			int_200m_err_raw << 104,
+			int_300m_info_raw << 63,
+			int_400m_err_raw << 65 | int_400m_info_raw << 15,
+			int_xaui_info_raw << 57,
+			int_bufd_sk_raw << 12
 	};
 	}
 
@@ -240,6 +255,33 @@ class gpio_int_same_domain_multi_vseq extends base_vseq;
 	endtask : body
 
 endclass : gpio_int_same_domain_multi_vseq
+
+//----------------------------------------------------------------------------
+// SEQUENCE : continuous input of the same effective interrupt source 
+//----------------------------------------------------------------------------
+class gpio_int_same_int_cont_vseq extends base_vseq;
+	rand int unsigned int_cont; //genreate a random int_bit for continuous inputting
+	function new(string name = "gpio_int_same_domain_multi_vseq");
+		super.new(name);
+	endfunction
+	`uvm_object_utils(gpio_int_same_int_cont_vseq)
+
+	constraint int_cont_ct {
+		int_cont inside {[0:108]};
+	}
+
+	virtual task body();
+		gpio_int_sequence_item item;
+		gpio_int_cfg_fd_vseq cfg_seq;
+		repeat (`LINE_NUM) begin
+			//`uvm_do(cfg_seq)
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE;
+															   item.int_bit == int_cont;
+															   })
+		end
+	endtask : body
+
+endclass : gpio_int_same_int_cont_vseq
 
 //----------------------------------------------------------------------------
 // SEQUENCE : generate random interrupt requests for int_src, int_code and int_state coverage
@@ -279,7 +321,7 @@ class intr_priority_compare_vseq extends base_vseq;
 		gpio_int_sequence_item item;
 
 		repeat(`LINE_NUM) begin
-			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {item.int_num == SINGLE; 
+			`uvm_do_on_with(item, p_sequencer.p_gpio_int_sqr, {//item.int_num == SINGLE; 
 															   item.int_ack == 1'b1;})
 		end
 
