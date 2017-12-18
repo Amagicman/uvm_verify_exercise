@@ -1,2 +1,2 @@
-# gpio_int_verify
-Function verification of gpio_int module using UVM method.
+# uvm_verify_exercise
+Function verification of interrupt module using UVM method.
